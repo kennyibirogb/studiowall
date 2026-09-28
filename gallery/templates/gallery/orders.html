@@ -1,0 +1,38 @@
+{% extends "gallery/base.html" %}
+{% block title %}My orders | {{ profile.name }}{% endblock %}
+{% block bodyclass %}gate{% endblock %}
+{% block bodyattrs %}style="--tint:{{ featured.tint|default:'#1b2320' }}"{% endblock %}
+{% block content %}
+<a class="back" href="{% url 'gallery:index' %}">Back to the wall</a>
+<div class="gatewrap single">
+  <main class="gate-form wide">
+    <h1>My orders</h1>
+
+    {% for o in orders %}
+    <article class="order">
+      <a href="{{ o.painting.get_absolute_url }}">
+        <span class="frame">
+          <img src="{{ o.painting.image.url }}" alt="{{ o.painting.title }}">
+        </span>
+      </a>
+      <div>
+        <h2>{{ o.painting.title }}</h2>
+        <p>{{ o.amount }} · ordered {{ o.created|date:"j M Y" }}</p>
+        <span class="pill {{ o.status }}">{{ o.get_status_display }}</span>
+
+        {% if o.status == "requested" or o.status == "pending" %}
+          <form method="post" action="{% url 'gallery:remove_order' o.pk %}" style="margin-top:10px">
+            {% csrf_token %}
+            <button type="submit" class="bb alt" style="width:auto;padding:8px 16px;font-size:14px">
+              Remove
+            </button>
+          </form>
+        {% endif %}
+      </div>
+    </article>
+    {% empty %}
+    <p class="lede">You have not ordered anything yet. <a href="{% url 'gallery:index' %}">Walk the wall.</a></p>
+    {% endfor %}
+  </main>
+</div>
+{% endblock %}

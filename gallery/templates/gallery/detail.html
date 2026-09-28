@@ -1,0 +1,53 @@
+{% extends "gallery/base.html" %}
+{% block title %}{{ p.title }} | {{ profile.name }}{% endblock %}
+{% block bodyclass %}room{% endblock %}
+{% block bodyattrs %}style="--tint:{{ p.tint }}"{% endblock %}
+{% block content %}
+<a class="back" href="{% url 'gallery:index' %}">Back to the wall</a>
+<div class="viewer">
+  <div class="stage">
+    <div class="big" id="big">
+      <img id="pic" src="{{ p.image.url }}" alt="{{ p.title }}">
+      <div id="loupe" aria-hidden="true"></div>
+    </div>
+  </div>
+  <aside class="info">
+    <h1>{{ p.title }}</h1>
+    <p>{{ p.medium }}{% if p.medium and p.year %}, {% endif %}{{ p.year|default_if_none:"" }}</p>
+    {% if p.size %}<p>{{ p.size }}</p>{% endif %}
+    {% if p.description %}<p class="desc">{{ p.description|linebreaksbr }}</p>{% endif %}
+    {% if p.price %}<p class="price">{{ p.price }}</p>{% endif %}
+
+    <div class="buy">
+  {% if p.status == "sold" %}
+    <p>This painting has been sold.</p>
+  {% elif p.status == "available" %}
+
+    {% if p.can_checkout %}
+      <a class="bb" href="{% url 'gallery:checkout' p.slug %}">
+        {% if gateway %}
+          Buy now{% if p.price %} · {{ p.price }}{% endif %}
+        {% else %}
+          Request this painting{% if p.price %} · {{ p.price }}{% endif %}
+        {% endif %}
+      </a>
+    {% endif %}
+
+    {% if whatsapp %}
+      <a class="bb alt" href="{{ whatsapp }}" target="_blank" rel="noopener">Enquire on WhatsApp</a>
+    {% endif %}
+    {% if mail %}
+      <a class="bb alt" href="{{ mail }}">Enquire by email</a>
+    {% endif %}
+
+  {% endif %}
+</div>
+
+    <nav class="pn">
+      {% if prev %}<a rel="prev" href="{% url 'gallery:detail' prev %}">Previous</a>{% endif %}
+      {% if next %}<a rel="next" href="{% url 'gallery:detail' next %}">Next</a>{% endif %}
+    </nav>
+    <p class="tip">Move over the painting to inspect the brushwork.</p>
+  </aside>
+</div>
+{% endblock %}

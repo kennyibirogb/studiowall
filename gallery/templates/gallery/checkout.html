@@ -1,0 +1,20 @@
+{% extends "gallery/base.html" %}
+{% block title %}Buy {{ p.title }} | {{ profile.name }}{% endblock %}
+{% block bodyclass %}gate{% endblock %}
+{% block bodyattrs %}style="--tint:{{ p.tint }}"{% endblock %}
+{% block content %}
+<a class="back" href="{{ p.get_absolute_url }}">Back to the painting</a>
+<div class="gatewrap">
+  <div class="gate-art">{% include "gallery/_art.html" with art=p %}</div>
+  <main class="gate-form">
+    <h1>{{ p.title }}</h1>
+    <p class="lede">{{ p.medium }}{% if p.medium and p.year %}, {% endif %}{{ p.year|default_if_none:"" }}{% if p.size %} &middot; {{ p.size }}{% endif %}</p>
+    <p class="total"><span>Total</span>{{ p.price }}</p>
+    <p class="lede">This is an original, so there is only one. Tell us where to send it.</p>
+    <form method="post">{% csrf_token %}
+      {{ form.as_p }}
+      <button class="go">{% if gateway %}Continue to payment{% else %}Send request{% endif %}</button>
+    </form>
+  </main>
+</div>
+{% endblock %}

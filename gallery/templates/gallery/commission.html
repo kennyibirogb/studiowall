@@ -1,0 +1,20 @@
+{% extends "gallery/base.html" %}
+{% block title %}Commission | {{ profile.name }}{% endblock %}
+{% block bodyclass %}gate{% endblock %}
+
+{% block content %}
+<a class="back" href="{% url 'gallery:index' %}">Back to the wall</a>
+
+<div class="gatewrap single">
+  <main class="gate-form wide">
+    <h1>Commission a painting</h1>
+    <p class="lede">Tell the artist what you have in mind and upload any reference images.</p>
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="go" type="submit">Send commission request</button>
+    </form>
+  </main>
+</div>
+{% endblock %}

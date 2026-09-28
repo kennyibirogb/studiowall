@@ -1,0 +1,23 @@
+{% extends "gallery/base.html" %}
+{% block content %}
+<header class="masthead">
+  <h1>{{ profile.name }}</h1>
+  {% if profile.tagline %}<p>{{ profile.tagline }}</p>{% endif %}
+</header>
+
+<main class="hang">
+  {% for p in paintings %}
+  <a class="piece" href="{{ p.get_absolute_url }}" style="--ar:{{ p.aspect }};--r:{{ p.tilt }}deg;--dy:{{ p.drop }}px;--i:{{ forloop.counter0 }}">
+    <span class="frame"><img src="{{ p.image.url }}" alt="{{ p.title }}"{% if p.width %} width="{{ p.width }}" height="{{ p.height }}"{% endif %} loading="lazy"></span>
+    <span class="plaque"><b>{{ p.title }}</b>{{ p.medium }}{% if p.medium and p.year %}, {% endif %}{{ p.year|default_if_none:"" }}{% if p.status == "sold" %}<i class="sold" title="Sold"></i>{% endif %}</span>
+  </a>
+  {% empty %}
+  <p class="empty">
+    {% if request.user.is_staff %}The wall is empty. <a href="{% url 'admin:gallery_painting_add' %}">Add the first painting.</a>
+    {% else %}New paintings are coming soon.{% endif %}
+  </p>
+  {% endfor %}
+</main>
+
+{% if profile.bio %}<footer class="about"><p>{{ profile.bio|linebreaksbr }}</p></footer>{% endif %}
+{% endblock %}

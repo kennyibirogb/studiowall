@@ -1,0 +1,19 @@
+{% extends "gallery/base.html" %}
+{% block title %}Sign up | {{ profile.name }}{% endblock %}
+{% block bodyclass %}gate{% endblock %}
+{% block bodyattrs %}style="--tint:{{ featured.tint|default:'#1b2320' }}"{% endblock %}
+{% block content %}
+<a class="back" href="{% url 'gallery:index' %}">Back to the wall</a>
+<div class="gatewrap">
+  <div class="gate-art">{% include "gallery/_art.html" with art=featured %}</div>
+  <main class="gate-form">
+    <h1>Take a painting home</h1>
+    <p class="lede">Make an account to buy from {{ profile.name }}. It takes a minute.</p>
+    <form method="post">{% csrf_token %}
+      {{ form.as_p }}
+      <button class="go">Create account</button>
+    </form>
+    <p class="alt">Already registered? <a href="{% url 'login' %}">Log in</a></p>
+  </main>
+</div>
+{% endblock %}

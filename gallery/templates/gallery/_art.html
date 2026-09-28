@@ -1,0 +1,6 @@
+<figure class="hung">
+  <span class="frame">
+    {% if art %}<img src="{{ art.image.url }}" alt="{{ art.title }}">{% else %}<span class="blank"></span>{% endif %}
+  </span>
+  <figcaption>{% if art %}{{ art.title }}{% else %}{{ profile.name }}{% endif %}</figcaption>
+</figure>
